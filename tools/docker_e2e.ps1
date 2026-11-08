@@ -34,8 +34,10 @@ try {
     Assert-Contains (Invoke-Api POST "/api/plan" '{"network":"10.9.0.0/24","requests":[{"name":"a","hosts":100},{"name":"b","hosts":50}]}') "10.9.0.128/26"
     $page = Invoke-WebRequest -UseBasicParsing "$($script:base)/"
     Assert-Contains $page.Headers["Content-Security-Policy"] "default-src 'self'"
-    try { Invoke-Api POST "/api/prefixes" '{"cidr":"10.0.0.0/33"}' | Out-Null; throw "an invalid prefix was accepted" }
-    catch [System.Net.WebException] { if ([int]$_.Exception.Response.StatusCode -ne 422) { throw } }
+    # an invalid prefix must be refused with 422 (the exception type differs between PowerShell 5.1 and 7)
+    $status = 0
+    try { Invoke-Api POST "/api/prefixes" '{"cidr":"10.0.0.0/33"}' | Out-Null } catch { $status = [int]$_.Exception.Response.StatusCode }
+    if ($status -ne 422) { throw "expected HTTP 422 for an invalid prefix, got $status" }
 
     docker rm -f $name | Out-Null
     Start-App
