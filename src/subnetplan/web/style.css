@@ -1,0 +1,25 @@
+:root{--bg:#f6f7f9;--card:#fff;--ink:#1c2128;--muted:#6b7480;--line:#e2e6eb;--accent:#2563eb;--ok:#15803d;--bad:#b91c1c;--bar:#dbe4f5}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1318;--card:#171c23;--ink:#e6eaf0;--muted:#8b95a3;--line:#262d37;--accent:#6ea0ff;--ok:#4ade80;--bad:#f87171;--bar:#26324a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{display:flex;align-items:baseline;gap:12px;padding:18px 24px;border-bottom:1px solid var(--line);background:var(--card)}
+h1{margin:0;font-size:20px}h2{margin:0 0 12px;font-size:15px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.muted{color:var(--muted)}
+main{max-width:1100px;margin:0 auto;padding:20px 16px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}
+.wide{grid-column:1/-1}
+@media (max-width:760px){main{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:12px;color:var(--muted);font-weight:600}
+td.net{font-family:ui-monospace,Menlo,Consolas,monospace}
+.bar{display:inline-block;width:90px;height:8px;background:var(--bar);border-radius:4px;overflow:hidden;vertical-align:middle;margin-right:8px}
+.bar>i{display:block;height:100%;background:var(--accent)}
+label{display:block;margin-bottom:10px;font-size:13px;color:var(--muted)}
+input,select,textarea{display:block;width:100%;margin-top:4px;padding:7px 9px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:inherit}
+textarea{font-family:ui-monospace,Menlo,Consolas,monospace}
+button{padding:7px 14px;border:0;border-radius:6px;background:var(--accent);color:#fff;font:inherit;cursor:pointer}
+button.secondary{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+button.link{background:none;color:var(--accent);padding:0 6px;border:0}
+.row{display:flex;gap:8px}.inline{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}.inline input,.inline select{width:auto;flex:1;min-width:130px;margin:0}
+#msg{grid-column:1/-1;margin:0;min-height:1.5em}#msg.err{color:var(--bad)}#msg.ok{color:var(--ok)}
+#result{margin-top:12px}.bad{color:var(--bad)}

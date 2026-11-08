@@ -1,0 +1,87 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: test (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - run: pip install -e ".[web,dev]"
+      - run: ruff check .
+      - run: ruff format --check .
+      - run: mypy
+      - run: pytest -n auto --cov
+
+  windows:
+    name: test (Windows)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+      - run: pip install -e ".[web,dev]"
+      - run: pytest -n auto
+
+  no-extras:
+    # the arithmetic and the CLI have no dependencies at all: prove it
+    name: core without the web extra
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+      - run: pip install .
+      - run: |
+          subnetplan plan 10.0.0.0/22 --need lan=200 --need wifi=60 --need wan=2 --p2p wan
+          subnetplan serve && exit 1 || test $? -eq 2
+
+  evaluation:
+    name: measured quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+      - run: pip install -e ".[web,dev]"
+      - name: Correctness against brute force, fragmentation, scaling
+        run: |
+          python tools/evaluate.py --quick --out report.json | tee eval.txt
+          grep -q " 0 mismatches" eval.txt
+
+  docker:
+    name: docker image
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - run: docker build -t subnetplan .
+      - name: web app, API, restart on the same volume, CLI (read-only, no capabilities)
+        run: bash tools/docker_e2e.sh subnetplan
+
+  docker-windows:
+    # the same flow driven from PowerShell, to keep that script honest (Linux container on the runner)
+    name: docker flow from PowerShell
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+      - run: docker build -t subnetplan .
+      - name: PowerShell script
+        shell: pwsh
+        run: ./tools/docker_e2e.ps1 -Image subnetplan

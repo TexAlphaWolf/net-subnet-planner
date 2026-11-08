@@ -1,0 +1,201 @@
+{
+  "version": "1.0.0",
+  "python": "3.13.16",
+  "machine": "Linux x86_64",
+  "quick": false,
+  "correctness": {
+    "checks": {
+      "range_to_cidrs vs ipaddress.summarize_address_range": {
+        "cases": 12000,
+        "mismatches": 0
+      },
+      "summarize vs ipaddress.collapse_addresses and exact coverage": {
+        "cases": 3000,
+        "mismatches": 0
+      },
+      "free_blocks vs address bitmap (and minimal)": {
+        "cases": 3000,
+        "mismatches": 0
+      },
+      "Pool alloc/release: held + free partition the parent; full release restores it": {
+        "cases": 300,
+        "mismatches": 0
+      },
+      "VLSM places all requests iff the sizes fit; allocations are disjoint": {
+        "cases": 1200,
+        "mismatches": 0
+      },
+      "find_conflicts vs quadratic reference": {
+        "cases": 1200,
+        "mismatches": 0
+      }
+    },
+    "total_cases": 20700,
+    "total_mismatches": 0
+  },
+  "fragmentation": {
+    "pool": "10.0.0.0/20",
+    "sizes": [
+      "/24",
+      "/25",
+      "/26",
+      "/27",
+      "/28",
+      "/29",
+      "/30"
+    ],
+    "weights": [
+      1,
+      2,
+      4,
+      6,
+      8,
+      8,
+      6
+    ],
+    "ops_per_run": 6000,
+    "runs_per_cell": 15,
+    "results": {
+      "60%": {
+        "buddy best-fit": {
+          "requests": 45555,
+          "avoidable_refusals": 0,
+          "avoidable_pct": 0.0,
+          "per_run_pct_mean": 0.0,
+          "per_run_pct_stdev": 0.0,
+          "runs_with_fewer_refusals_than_first_fit": 0,
+          "runs_with_equal_refusals_to_first_fit": 15
+        },
+        "first-fit": {
+          "requests": 45555,
+          "avoidable_refusals": 0,
+          "avoidable_pct": 0.0,
+          "per_run_pct_mean": 0.0,
+          "per_run_pct_stdev": 0.0
+        },
+        "next-fit": {
+          "requests": 46446,
+          "avoidable_refusals": 1614,
+          "avoidable_pct": 3.48,
+          "per_run_pct_mean": 3.47,
+          "per_run_pct_stdev": 0.48
+        }
+      },
+      "75%": {
+        "buddy best-fit": {
+          "requests": 45707,
+          "avoidable_refusals": 34,
+          "avoidable_pct": 0.07,
+          "per_run_pct_mean": 0.07,
+          "per_run_pct_stdev": 0.04,
+          "runs_with_fewer_refusals_than_first_fit": 7,
+          "runs_with_equal_refusals_to_first_fit": 2
+        },
+        "first-fit": {
+          "requests": 45682,
+          "avoidable_refusals": 44,
+          "avoidable_pct": 0.1,
+          "per_run_pct_mean": 0.1,
+          "per_run_pct_stdev": 0.08
+        },
+        "next-fit": {
+          "requests": 48265,
+          "avoidable_refusals": 4452,
+          "avoidable_pct": 9.22,
+          "per_run_pct_mean": 9.22,
+          "per_run_pct_stdev": 0.68
+        }
+      },
+      "90%": {
+        "buddy best-fit": {
+          "requests": 46535,
+          "avoidable_refusals": 1220,
+          "avoidable_pct": 2.62,
+          "per_run_pct_mean": 2.62,
+          "per_run_pct_stdev": 0.35,
+          "runs_with_fewer_refusals_than_first_fit": 14,
+          "runs_with_equal_refusals_to_first_fit": 1
+        },
+        "first-fit": {
+          "requests": 46829,
+          "avoidable_refusals": 1726,
+          "avoidable_pct": 3.69,
+          "per_run_pct_mean": 3.68,
+          "per_run_pct_stdev": 0.46
+        },
+        "next-fit": {
+          "requests": 51865,
+          "avoidable_refusals": 10153,
+          "avoidable_pct": 19.58,
+          "per_run_pct_mean": 19.57,
+          "per_run_pct_stdev": 0.82
+        }
+      }
+    }
+  },
+  "performance": {
+    "find_conflicts_sweep": [
+      {
+        "n": 1000,
+        "seconds": 0.001
+      },
+      {
+        "n": 10000,
+        "seconds": 0.0153
+      },
+      {
+        "n": 100000,
+        "seconds": 0.3101
+      },
+      {
+        "n": 500000,
+        "seconds": 2.73
+      }
+    ],
+    "find_conflicts_quadratic_reference": [
+      {
+        "n": 500,
+        "seconds": 0.1447
+      },
+      {
+        "n": 1000,
+        "seconds": 0.703
+      },
+      {
+        "n": 2000,
+        "seconds": 3.5241
+      },
+      {
+        "n": 4000,
+        "seconds": 14.1919
+      }
+    ],
+    "vlsm": [
+      {
+        "requests": 100,
+        "placed": 100,
+        "seconds": 0.0005
+      },
+      {
+        "requests": 1000,
+        "placed": 1000,
+        "seconds": 0.0047
+      },
+      {
+        "requests": 10000,
+        "placed": 10000,
+        "seconds": 0.0536
+      },
+      {
+        "requests": 50000,
+        "placed": 50000,
+        "seconds": 0.3762
+      }
+    ],
+    "pool_churn": {
+      "operations": 200000,
+      "seconds": 0.911,
+      "ops_per_second": 219438
+    }
+  }
+}

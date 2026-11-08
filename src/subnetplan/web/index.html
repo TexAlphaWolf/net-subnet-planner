@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>subnetplan</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header><h1>subnetplan</h1><span class="muted">subnet planner &amp; IPAM</span></header>
+<main>
+  <section class="card wide">
+    <h2>Prefixes</h2>
+    <table id="tree"><thead><tr><th>Prefix</th><th>Name</th><th>VLAN</th><th>Status</th><th>Use</th><th></th></tr></thead><tbody></tbody></table>
+    <p id="empty" class="muted" hidden>No prefixes yet. Add one below.</p>
+  </section>
+
+  <section class="card">
+    <h2>Add a prefix</h2>
+    <form id="add">
+      <label>Network <input name="cidr" placeholder="10.0.0.0/16" required></label>
+      <label>Name <input name="name" placeholder="corp"></label>
+      <label>VLAN <input name="vlan" type="number" min="1" max="4094"></label>
+      <label>Status <select name="status"><option>container</option><option selected>active</option><option>reserved</option><option>deprecated</option></select></label>
+      <button>Add</button>
+    </form>
+  </section>
+
+  <section class="card">
+    <h2>Plan subnets (VLSM)</h2>
+    <form id="plan">
+      <label>Inside <select name="parent" id="parent"></select></label>
+      <label>One per line: name = hosts<textarea name="requests" rows="5" placeholder="office = 120&#10;guests = 60&#10;servers = 20"></textarea></label>
+      <label>Growth % <input name="growth" type="number" min="0" max="1000" value="20"></label>
+      <div class="row"><button value="preview">Preview</button><button value="apply" class="secondary">Apply</button></div>
+    </form>
+    <div id="result"></div>
+  </section>
+
+  <section class="card wide" id="addresses" hidden>
+    <h2>Addresses in <span id="addr-title"></span></h2>
+    <table id="addr-table"><thead><tr><th>IP</th><th>Kind</th><th>Hostname</th><th>Note</th><th></th></tr></thead><tbody></tbody></table>
+    <form id="addr-form" class="inline">
+      <input name="hostname" placeholder="hostname">
+      <input name="ip" placeholder="IP (blank = next free)">
+      <select name="kind"><option>host</option><option>gateway</option><option>reserved</option></select>
+      <button>Record</button>
+    </form>
+  </section>
+  <p id="msg" role="status"></p>
+</main>
+<script src="/static/app.js"></script>
+</body>
+</html>

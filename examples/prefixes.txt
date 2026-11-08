@@ -1,0 +1,5 @@
+# one prefix per line: cidr[,name]
+10.10.0.0/16,corp
+10.10.1.0/24,office
+10.10.2.0/24,guests
+10.10.2.0/24,guests-old
